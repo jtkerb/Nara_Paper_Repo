@@ -1,4 +1,4 @@
-# Oecologia_Nara
+# Nara manuscript repository
 
 Data, Code and supplementary material for:
 
