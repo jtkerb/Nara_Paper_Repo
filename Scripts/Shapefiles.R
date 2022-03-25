@@ -13,17 +13,28 @@ library(tidyr)
 library(directlabels)
 library(gridExtra)
 library(RColorBrewer)
+library(stringr)
 
+Green.ls <- list.files(path='Data/NaraShapefiles/', pattern='TotalGreen.*\\.shp$', full.names = TRUE)
+Hummock.ls <-list.files(path='Data/NaraShapefiles/', pattern='Mask.*\\.shp$', full.names = TRUE)
 
 # Read in shapefiles ------------------------------------------------------
 
+
+Naraplot <- function(greenname, humname=NULL){
+  year<- str_sub(greenname, -8,-5)
+  site<- str_match(greenname, "TotalGreen_\\s*(.*?)\\s*_201")[,2]
+    print(year)
+    print(site)
+    print(paste0(site,'_',year))
+}
+
+Naraplot(Green.ls)
+
 #C1 all yrs
 C1G_16 <- st_read(dsn = "Data/NaraShapefiles/TotalGreen_1C_2016.shp")
-C1D_16 <- st_read(dsn = "Data/NaraShapefiles/TotalDead_1C_2016.shp")
 C1G_17 <- st_read(dsn = "Data/NaraShapefiles/TotalGreen_1C_2017.shp")
-C1D_17 <- st_read(dsn = "Data/NaraShapefiles/TotalDead_1C_2017.shp")
 C1G_18 <- st_read(dsn = "Data/NaraShapefiles/TotalGreen_1C_2018.shp")
-C1D_18 <- st_read(dsn = "Data/NaraShapefiles/TotalDead_1C_2018.shp")
 C1_area <-st_read(dsn = "Data/NaraShapefiles/1C_mask.shp")
 
 #E1 all years
