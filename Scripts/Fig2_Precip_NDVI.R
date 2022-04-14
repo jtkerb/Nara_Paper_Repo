@@ -15,6 +15,7 @@ interduneNDVI_rain <- read.csv("Data/Monthly_NDVI_Interdune_2000-2018_MOD13Q1_ra
 interduneNDVI_rain18<-interduneNDVI_rain[interduneNDVI_rain$Year==2018,]
 interduneNDVI_rain17<-interduneNDVI_rain[interduneNDVI_rain$Year==2017,]
 
+#NDVI plot
 (ndvi_plot <- interduneNDVI_rain %>%
   ggplot(aes(x = Month, y = NDVI_anomaly),interduneNDVI_rain) +
   geom_point(alpha = .15, size= 4, color = "darkgreen")+
@@ -29,6 +30,7 @@ interduneNDVI_rain17<-interduneNDVI_rain[interduneNDVI_rain$Year==2017,]
 
 interduneNDVI_rain$Year <- factor(interduneNDVI_rain$Year)
 
+#Rain Plot
 (rain_plot <- interduneNDVI_rain %>%
   ggplot(aes(x = Month, y = AnnSumRain),interduneNDVI_rain) +
 

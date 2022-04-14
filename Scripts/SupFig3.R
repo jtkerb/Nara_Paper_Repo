@@ -1,4 +1,4 @@
-#Supplemetnal plots exploring relationships in vegetation cover change or melon density to hummock size
+#Supplementary Fig 3. Scatter plots exploring relationships in vegetation cover change or melon density to hummock size
 
 nara.ag <- read.csv("Data/NaraMultiYear_Data.csv", header=T)
 

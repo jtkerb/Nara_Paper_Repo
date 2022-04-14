@@ -1,4 +1,4 @@
-#Reads in shapefiles, calculates cover area, and plots supplement
+#Reads in shapefiles, calculates cover area, and plots Sup Fig 3.
 
 Sys.setenv(LANGUAGE='en')
 library(tmap)   
@@ -22,11 +22,11 @@ library(magick)
 
 # List of shapefiles ------------------------------------------------------
 
-Green.ls <- list.files(path='Data/NaraShapefiles/', pattern='TotalGreen.*\\.shp$', full.names = TRUE)
+Green.ls <- list.files(path='Data/NaraShapefiles', pattern='TotalGreen.*\\.shp$', full.names = TRUE)
 
 Green.ls<-mixedsort(Green.ls)
 
-Hummock.ls <-list.files(path='Data/NaraShapefiles/', pattern='mask.*\\.shp$', full.names = TRUE)
+Hummock.ls <-list.files(path='Data/NaraShapefiles', pattern='mask.*\\.shp$', full.names = TRUE)
 
 # Read in shapefiles ------------------------------------------------------
 
@@ -71,8 +71,13 @@ Nara_data$Gr17m16.16Green<-(Nara_data$GreenArea_2017-Nara_data$GreenArea_2016)/N
 write.csv(Nara_data, 'Data/NaraMultiYearArea_Data.csv')
 
 
-# Supplementary Plotting Orthos and Cover ---------------------------------------------------------------
+# Supplementary Fig3 Plotting Orthos and Cover ---------------------------------------------------------------
 
+#Edit to your local path once imagery are downloaded. 
+#Imagery is locaaed here:
+Nara_Path<-'U:/Namibia_Imagery_Data/N_Orthos_UTM/'
+
+#Function to make individual cover plots
 Nara_Sites <- function(greenname){
   year<- str_sub(greenname, -8,-5)
   site<- str_match(greenname, "TotalGreen_\\s*(.*?)\\s*_201")[,2]
@@ -90,14 +95,16 @@ Nara_Sites <- function(greenname){
   tmap_save(nar_plot, file=paste0("Figures/SuppFigs/SupFig1_cover", siteyr,".png"), width = 4, height = 4, dpi = 600, units = "in")
 }
 
-Ortho.ls <-list.files(path='U:/Namibia_Imagery_Data/N_Orthos_UTM/', pattern='Nara.*\\.tif$', full.names = TRUE)
+#Get list of ortho tifs
+Ortho.ls <-list.files(path=Nara_Path, pattern='Nara.*\\.tif$', full.names = TRUE)
 Ortho.ls<-mixedsort(Ortho.ls)
 
+#Function to make individual ortho plots
 Nara_Rasters <- function(orthoname){
   year<- str_sub(orthoname, -12,-9)
   site<- str_match(orthoname, "Nara_\\s*(.*?)\\s*_201")[,2]
   siteyr <-paste0(site,"_",year)
-  Nara_Ortho<-read_stars(paste0("U:/Namibia_Imagery_Data/N_Orthos_UTM/Nara_",siteyr,"_UTM.tif"))
+  Nara_Ortho<-read_stars(paste0(Nara_Path,"Nara_",siteyr,"_UTM.tif"))
   nar_plot<-tm_shape(Nara_Ortho, unit ='m')+ 
     tm_rgb() +
     tm_layout(main.title = siteyr, frame = FALSE, main.title.position = "center",
@@ -107,9 +114,10 @@ Nara_Rasters <- function(orthoname){
   tmap_save(nar_plot, file=paste0("Figures/SuppFigs/SupFig1_orthos/SupFig1_ortho", siteyr,".png"), width = 4, height = 4, dpi = 600, units = "in")
 }
 
-
+#Apply function to ortho file list
 lapply(Ortho.ls, Nara_Rasters)  
-  
+
+#Get list of all cover plots created by above function  
 coverfiles <-
   list.files(
     path = here::here("Figures/SuppFigs/SupFig1_cover"),
@@ -118,8 +126,10 @@ coverfiles <-
     full.names = T
   )
 
+#Organize them for easier plotting
 coverfiles<-mixedsort(coverfiles)
 
+#Ger list of all orho plots created by above function
 orthofiles <-
   list.files(
     path = here::here("Figures/SuppFigs/SupFig1_orthos"),
@@ -128,8 +138,10 @@ orthofiles <-
     full.names = T
   )
 
+#Organize them for easier plotting
 orthofiles<-mixedsort(orthofiles)
 
+#Make composite figures for cover
 magick::image_read(coverfiles) %>%
   magick::image_montage(tile = "6", geometry = "x500+10+5") %>%
   magick::image_convert("jpg") %>%
@@ -138,6 +150,7 @@ magick::image_read(coverfiles) %>%
     quality = 100
   )
 
+#Make composite figure for orthos
 magick::image_read(orthofiles) %>%
   magick::image_montage(tile = "6", geometry = "x500+10+5") %>%
   magick::image_convert("jpg") %>%
@@ -145,23 +158,4 @@ magick::image_read(orthofiles) %>%
     format = ".jpg", path = here::here(paste("Figures/SuppFigs/SuppFig1_orthos.jpg",sep="")),
     quality = 100
   )
-
-
-
-N4E_17<-read_stars("U:/Namibia_Imagery_Data/N_Orthos_UTM/Nara_4E_2017_UTM.tif")
-N4E_17s<-st_rgb(N4E_17, 
-        dimension = 3,
-        maxColorValue = 255,
-        use_alpha = FALSE, 
-        probs = c(0.02, 0.98), #Probabilities for percent clip
-        stretch = TRUE)
-  
-nar_plot<-tm_shape(N4E_17, unit ='m')+ 
-  tm_rgb() +
- 
-  tm_layout(main.title = "4E 2017", frame = FALSE, main.title.position = "center",
-            inner.margins = c(0.2, 0.02, 0.02, 0.02))+
-  tm_scale_bar(breaks = 5, position=c("left", "bottom"), lwd = 2, text.size = 1) 
-
-tmap_save(nar_plot, file=paste0("Figures/SuppFigs/SupFig1_orthos/SupFig1_ortho", siteyr,".png"), width = 4, height = 4, dpi = 600, units = "in")
 

@@ -27,7 +27,7 @@ Green17<-ggplot(nara.ag, aes(x=Combo2, y=Gr17m16.16Green, fill = Treatment, colo
 Green18<-ggplot(nara.ag, aes(x=Combo2, y=Gr18m17.17Green, fill = Treatment, color = Location)) + 
   geom_boxplot()+
   coord_cartesian(ylim=c(-0.5, 3.25))+
-  coord_cartesian(ylim=c(1.5, 5.25))+  ### note: the commented out graphical parameters here are used in the replotting needed for the axis breaks.
+  #coord_cartesian(ylim=c(1.5, 5.25))+  ### note: the commented out graphical parameters here are used in the replotting needed for the axis breaks.
   scale_y_continuous(breaks=seq(1,6, 1))+
   scale_fill_manual(values=c("#666666", "#999999")) +
   scale_color_manual(values = c("#333333", "#333333"))+
@@ -57,8 +57,9 @@ Fruit17<-ggplot(nara.ag, aes(x=Combo2, y=Mature1N17.17Green, fill = Treatment, c
 Fruit18<-ggplot(nara.ag, aes(x=Combo2, y=Mature1N18.18Green, fill = Treatment, color = Location)) + 
   geom_boxplot()+
   coord_cartesian(ylim=c(-0.5, 3.25))+
-  coord_cartesian(ylim=c(0.75, 4.5))+  ### note: the commented out graphical parameters here are used in the replotting needed for the axis breaks.
-  scale_y_continuous(breaks=seq(1.5,4.5, 1))+
+  #coord_cartesian(ylim=c(0.75, 4.5))+  ### note: the commented out graphical parameters here are used in the replotting needed for the axis breaks.
+  #scale_y_continuous(breaks=seq(1.5,4.5, 1))+
+  scale_y_continuous(breaks=seq(1,6, 1))+
   scale_fill_manual(values=c("#666666", "#CCCCCC")) +
   scale_color_manual(values = c("#333333", "#333333"))+
   labs(y=NULL)+
