@@ -1,4 +1,5 @@
-#Reads in shapefiles, calculates cover area, and plots Sup Fig 3.
+#Code for reading in shapefiles, calculates cover area, and plots Sup Fig 1.
+#Kerby et al. 2022
 
 Sys.setenv(LANGUAGE='en')
 library(tmap)   
@@ -58,13 +59,16 @@ Nara_Hum_Area <- function(humname){
   return(temp2) 
 }
 
+#Applies function to calculate hummock area
 HumArea<-data.frame(do.call(rbind, lapply(X=Hummock.ls, FUN=Nara_Hum_Area)))
 
+#Data handling to add to dataframe
 HumArea$site<-unlist(HumArea$site)
 HumArea$humarea<-unlist(HumArea$humarea)
 
 Nara_data<-left_join(Nara_data, HumArea, by = 'site')
 
+#Calculate change in cover metric
 Nara_data$Gr18m17.17Green<-(Nara_data$GreenArea_2018-Nara_data$GreenArea_2017)/Nara_data$GreenArea_2017
 Nara_data$Gr17m16.16Green<-(Nara_data$GreenArea_2017-Nara_data$GreenArea_2016)/Nara_data$GreenArea_2016
 
